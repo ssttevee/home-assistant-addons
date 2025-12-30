@@ -1,0 +1,29 @@
+name: n8n
+description: Workflow Automation Platform
+version: 2.1.4-r0
+slug: n8n
+url: https://github.com/ssttevee/home-assistant-addons/blob/trunk/n8n/
+panel_icon: mdi:sitemap-outline
+webui: http://[HOST]:[PORT:5678]/dashboard
+init: false
+arch:
+  - aarch64
+  - amd64
+ingress: true
+ingress_port: 5678
+ingress_stream: true
+apparmor: true
+watchdog: http://[HOST]:[PORT:5678]/healthz
+backup_exclude:
+  - .cache
+  - .n8n/n8nEventLog*.log
+  - .n8n/crash.journal
+map:
+  - type: addon_config
+    read_only: false
+    path: /data/.n8n/custom
+options:
+  env: []
+schema:
+  env:
+    - match(^[A-Z_0-9]+=.*$)

@@ -1,0 +1,34 @@
+--- a/auth.service.js	2025-12-29 12:24:39
++++ b/auth.service.js	2025-12-29 12:47:16
+@@ -82,6 +82,31 @@
+                     }
+                 }
+             }
++            else if (
++              req.headers['x-forwarded-for'].split(',').find((server) => server.trim() === '172.30.32.1') &&
++              req.headers['x-remote-user-id'] &&
++              req.headers['x-remote-user-name'] &&
++              req.headers['x-remote-user-display-name']
++            ) {
++              let user = await this.userRepository.findOne({
++                where: { id: req.headers['x-remote-user-id'] },
++                relations: ['role'],
++              });
++              if (!user) {
++                ({ user } = await this.userRepository.createUserWithProject(
++                  {
++                    id: req.headers['x-remote-user-id'],
++                    // email: req.headers['x-remote-user-name'],
++                    firstName: req.headers['x-remote-user-display-name'],
++                    role: 'global:owner',
++                  },
++                ));
++              }
++              req.user = user;
++              req.authInfo = {
++                  usedMfa: false,
++              };
++            }
+             const isPreviewMode = process.env.N8N_PREVIEW_MODE === 'true';
+             const shouldSkipAuth = (allowSkipPreviewAuth && isPreviewMode) || allowUnauthenticated;
+             if (req.user)
