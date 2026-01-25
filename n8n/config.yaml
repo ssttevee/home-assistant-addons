@@ -1,6 +1,6 @@
 name: n8n
 description: Workflow Automation Platform
-version: 2.1.4-r1
+version: 2.1.5-r0
 slug: n8n
 url: https://github.com/ssttevee/home-assistant-addons/blob/trunk/n8n/
 panel_icon: mdi:sitemap-outline
